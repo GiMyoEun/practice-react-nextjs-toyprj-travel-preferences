@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@animation: spin 1s linear infinite;
+@animation: bounce 1s infinite;
 
 :root {
     --foreground-rgb: 0, 0, 0;
@@ -23,5 +25,26 @@ body {
 @layer utilities {
     .text-balance {
         text-wrap: balance;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     }
 }
