@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import Proceeding from '@/UI/Proceeding';
+
 import BgImgContent from '@/UI/BgImgContent';
 import BgImgQuestion from '@/UI/BgImgQuestion';
+import { motion } from 'framer-motion';
 
 import RecommendedOutfit from '@/components/ReommendedOutfit';
 import { RECOMMENDED_OUTFITS } from '@/public/resources/constants/text';
@@ -24,7 +25,7 @@ const Recommendation = () => {
                 {/* <Proceeding title="열심히 찾고있어요" /> */}
                 <BgImgQuestion title="기온별 옷차림이에요" />
                 {RECOMMENDED_OUTFITS.map((item: RecommendedOutfitType, idx: number) => {
-                    if (idx >= 0 && idx < 4) {
+                    if (idx >= 4) {
                         return (
                             <RecommendedOutfit
                                 key={item.degree}

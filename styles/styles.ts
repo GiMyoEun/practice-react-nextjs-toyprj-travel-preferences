@@ -43,6 +43,17 @@ export const recommendedOutfitsContentAmber =
 export const recommendedOutfitsContentLime =
     'align-baseline flex mx-auto mt-[13px] flex-col opacity-70 h-23 w-96 pt-1 pb-1 bg-[#84cc16]';
 
+export const recommendedOutfitsContentSky =
+    'align-baseline flex mx-auto mt-[13px] flex-col opacity-70 h-23 w-96 pt-1 pb-1 bg-sky-200';
+
+export const recommendedOutfitsContentBlue =
+    'align-baseline flex mx-auto mt-[13px] flex-col opacity-70 h-23 w-96 pt-1 pb-1 bg-blue-300';
+export const recommendedOutfitsContentIndigo =
+    'align-baseline flex mx-auto mt-[13px] flex-col opacity-70 h-23 w-96 pt-1 pb-1 bg-indigo-500';
+
+export const recommendedOutfitsContentNavy =
+    'align-baseline flex mx-auto mt-[13px] flex-col opacity-70 h-23 w-96 pt-1 pb-1 bg-indigo-600';
+
 export const recommendedOutfitsInnerContent = 'mx-0 my-auto flex items-center flex-1';
 
 export const recommendedOutfitsTitle =
