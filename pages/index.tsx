@@ -1,9 +1,13 @@
 import BgImgContent from '@/UI/BgImgContent';
 import BgImgBtn from '@/UI/BgImgBtn';
 import InnerContent from '@/UI/InnerContent';
+import { useRouter } from 'next/router';
 
 export default function Home() {
-    const changeUrlHandler = () => {};
+    const router = useRouter();
+    const changeUrlHandler = () => {
+        router.push('/pre-question');
+    };
 
     return (
         <>

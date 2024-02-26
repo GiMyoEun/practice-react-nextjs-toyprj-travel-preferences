@@ -5,23 +5,12 @@ import BgImgQuestion from '@/UI/BgImgQuestion';
 
 import RecommendedOutfits from '@/components/RecommendedOutfits';
 import BgImgBtn from '@/UI/BgImgBtn';
-import Proceeding from '@/UI/Proceeding';
-
-import { getBaseDate, getBaseTime, getCurrPosition } from '@/public/resources/common';
-import { fetchVillageFcstInfo } from '../api/hello';
 
 // our-domain.com/news/something-important
-
-async function fethchSortedPlaces() {
-    const result = await getCurrPosition();
-
-    return result;
-}
 
 const Recommendation = () => {
     const router = useRouter();
     const answer = router.query.answer;
-    fetchVillageFcstInfo();
 
     const contentClass =
         'align-baseline text-center object-center h-svh bg-center bg-no-repeat bg-cover border-transparent pt-14';
@@ -29,8 +18,9 @@ const Recommendation = () => {
     return (
         <>
             <BgImgContent url='url("/resources/img/cloud.jpg")' class={contentClass}>
-                <Proceeding title="열심히 찾고있어요" />
-
+                {/* <Proceeding title="열심히 찾고있어요" /> */}
+                <BgImgQuestion title="기온별 옷차림이에요" />
+                <RecommendedOutfits type="ONE" />
                 <BgImgBtn onClickBtn={() => {}} title="목록" />
             </BgImgContent>
         </>

@@ -72,3 +72,14 @@ export const ProceedingInnerContent = 'mx-0 my-auto animate-bounce';
 export const proceedingIcon = 'h-16 w- mx-auto';
 
 export const proceedingText = 'text-[20px] text-white font-bold subpixel-antialiased';
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const alertTitle = 'text-[#A94438] font-bold subpixel-antialiased';
+
+export const alertDiscription = 'text-sm mt-4 font-bold subpixel-antialiased';
+
+export const alerteButtonDiv = 'mt-6';
+
+export const alerteButton =
+    'text-sm text-[#d24545] font-bold rounded-lg p-2 bg-[#E6BAA3] hover:opacity-70 bg-white active:opacity-70 bg-white focus:opacity-70 bg-white';
