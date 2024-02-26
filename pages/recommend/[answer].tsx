@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 
 import BgImgContent from '@/UI/BgImgContent';
 import BgImgQuestion from '@/UI/BgImgQuestion';
-import { motion } from 'framer-motion';
 
 import RecommendedOutfit from '@/components/ReommendedOutfit';
 import { RECOMMENDED_OUTFITS } from '@/public/resources/constants/text';
@@ -33,14 +32,14 @@ const Recommendation = () => {
                                 title={item.degree}
                                 src={item.img}
                                 discription={
-                                    <p>
+                                    <>
                                         {item.outfits.map((outfit: string) => (
-                                            <>
+                                            <p key={outfit}>
                                                 {outfit}
                                                 <br />
-                                            </>
+                                            </p>
                                         ))}
-                                    </p>
+                                    </>
                                 }
                             />
                         );

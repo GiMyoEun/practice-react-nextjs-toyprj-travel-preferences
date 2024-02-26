@@ -13,7 +13,7 @@ const RecommendedOutfit = (props: { className: string; title: string; src: strin
                 <h3 className={recommendedOutfitsTitle}>{props.title}</h3>
                 {props.src.map((item: string) => {
                     return (
-                        <div className={recommendedOutfitsImg}>
+                        <div className={recommendedOutfitsImg} key={item}>
                             <img src={item} />
                         </div>
                     );
