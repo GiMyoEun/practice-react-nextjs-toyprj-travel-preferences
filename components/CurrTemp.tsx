@@ -19,19 +19,19 @@ const CurrTemp = (props: { tempt: temperatureStateType }) => {
                 {!isNaN(tmp) && (
                     <h1 className="text-3xl flex flex-col text-green-950 opacity-100 subpixel-antialiased font-bold">{`현재 기온은 ${tmp}${NCST_DATA['T1H'].unit}`}</h1>
                 )}
-                <div className="text-[13px] flex items-center mt-0 pt-2 font-bold">
+                <div className="text-[13px] flex items-center text-green-950 mt-0 pt-2 font-bold">
                     {pty !== '0' && (
                         <>
                             <p>{`${ptyStr} 이/가 와요 `}</p>
                         </>
                     )}
                 </div>
-                <div className="text-[13px] flex items-center mt-0 pt-2 font-bold">
+                <div className="text-[13px] flex items-center text-green-950 mt-0 pt-2 font-bold">
                     {!isNaN(windChill) && <p>{`체감 : ${windChill}${NCST_DATA['T1H'].unit} | `}</p>}
                     {!isNaN(reh) && <p className="ml-2">{`습도 : ${reh}${NCST_DATA['REH'].unit} | `}</p>}
                     {!isNaN(wsd) && <p className="ml-2">{`풍속 : ${wsd}${NCST_DATA['WSD'].unit}`}</p>}
                 </div>
-                <div className="text-[13px] flex items-center mt-0 pt-2 font-bold">
+                <div className="text-[13px] flex items-center mt-0 text-green-950 pt-2 font-bold">
                     {!isNaN(pop) && <p>{`강수확률 : ${pop}${NCST_DATA['POP'].unit}`}</p>}
                     {pty !== '0' && (
                         <>
