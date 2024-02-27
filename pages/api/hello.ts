@@ -71,7 +71,7 @@ export const requestVillageFcstInfo = async (
         let result;
         var XMLHttpRequest = require('xhr2');
         var xhr = new XMLHttpRequest();
-        var url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'; /*URL*/
+        var url = 'https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'; /*URL*/
         var queryParams =
             '?' +
             encodeURIComponent('serviceKey') +
