@@ -13,3 +13,17 @@ export const alertState = atom({
         showAlert: false,
     },
 });
+
+export const temperatureState = atom({
+    key: 'temperatureState',
+    default: {
+        isReady: false,
+        windChill: 0, // 체감온도
+        reh: 0, // 습도
+        wsd: 0, // 풍속
+        tmp: 0, // 기온
+        pcp: 0, // 강수량
+        pop: 0, // 강수확률
+        pty: '', // 강수형태
+    },
+});

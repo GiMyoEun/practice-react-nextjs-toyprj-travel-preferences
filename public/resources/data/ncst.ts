@@ -1,4 +1,21 @@
-export const NCST_DATA = {
+export const CMM_CODE: {
+    [key: string]: {
+        [key: string]: string;
+    };
+} = {
+    PTY: {
+        0: '없음',
+        1: '비',
+        2: '비와 눈',
+        3: '눈',
+        4: '소나기',
+        5: '빗방울',
+        6: '빗방울눈날림',
+        7: '눈날림',
+    },
+};
+
+export const NCST_DATA: { [key: string]: { name: string; unit: string } } = {
     POP: {
         name: '강수확률',
         unit: '%',
