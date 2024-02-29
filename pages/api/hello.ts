@@ -38,6 +38,7 @@ export const getVillageFcstInfo = async () => {
     }
 
     if (result) {
+        console.log(result);
         return analyzeTempt(result);
     } else {
         return null;

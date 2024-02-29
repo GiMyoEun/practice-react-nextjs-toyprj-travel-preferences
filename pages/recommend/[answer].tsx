@@ -7,10 +7,9 @@ import { useRecoilState } from 'recoil';
 import { temperatureState } from '@/public/resources/constants/state';
 
 import { getVillageFcstInfo } from '../api/hello';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { temperatureStateType } from '@/public/resources/constants/type';
-import { getTempUnit } from '@/public/resources/common';
-import { NCST_DATA } from '@/public/resources/data/ncst';
+
 import CurrTemp from '@/components/CurrTemp';
 
 // our-domain.com/news/something-important

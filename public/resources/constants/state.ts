@@ -27,3 +27,22 @@ export const temperatureState = atom({
         pty: '', // 강수형태
     },
 });
+
+export const weatherReportState = atom({
+    key: 'weatherReportState',
+    default: {
+        isReady: false,
+        rain: '',
+        di: '',
+        wind: '',
+    },
+});
+
+export const oufitsState = atom({
+    key: 'oufitsState',
+    default: {
+        isReady: false,
+        outfits: [''],
+        mtr: [''],
+    },
+});

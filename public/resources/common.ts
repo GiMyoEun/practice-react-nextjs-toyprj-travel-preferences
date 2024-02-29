@@ -1,8 +1,5 @@
-import { resolve } from 'path';
-import { temptType } from './constants/type';
-import { CMM_CODE, NCST_DATA } from './data/ncst';
-import { useRecoilState } from 'recoil';
-import { temperatureState } from './constants/state';
+import { recommndedOutfitListType, temperatureStateType, temptType } from './constants/type';
+import { CMM_CODE, NCST_DATA, OUTFITS, RECOMMENDED_DATA } from './data/ncst';
 
 export const analyzeTempt = (temptArr: temptType[]) => {
     //   const [temperature, setTemperature] = useRecoilState(temperatureState);
@@ -77,24 +74,15 @@ export const analyzeTempt = (temptArr: temptType[]) => {
         }
     }
 
-    // 불쾌지수 계산 (0포함)
-    if ((reh && !isNaN(tmp)) || (reh && !isNaN(t1h))) {
-        const di = getDiscomfortIndex(reh, t1h || tmp);
-        console.log(di);
-    }
     // 체감온도 계산 (0포함)
-    if ((wsd && !isNaN(tmp)) || (wsd && !isNaN(t1h))) {
-        windChill = getWindChill(t1h || tmp, wsd);
+    if ((wsd && reh && !isNaN(tmp)) || (wsd && reh && !isNaN(t1h))) {
+        //   windChill = getWindChill(t1h || tmp, wsd);
+        windChill = getSensibleTemp(t1h || tmp, reh, wsd);
         console.log('체감온도 : ' + windChill);
     }
     // 강수형태 (0포함)
     if (pty) {
         console.log('강수형태 : ' + pty);
-    }
-    // 강수량 (0일땐 필요 없음)
-    if (rn1 || pcp) {
-        const rainfullReport = getRainfullAmountReport(rn1 || pcp);
-        console.log(rainfullReport);
     }
 
     const temp = {
@@ -113,33 +101,62 @@ export const analyzeTempt = (temptArr: temptType[]) => {
     // setTemperature(temp);
 };
 
-export const getTempUnit = (tempArr: string[]) => {
-    let resultObj: { [key: string]: string } = {};
-    for (var i = 0; i < tempArr!.length; i++) {
-        const category = tempArr![i];
-
-        if (NCST_DATA[category]) {
-            resultObj[category] = NCST_DATA[category].unit;
-        }
+export const getWeatherReport = (tempObj: temperatureStateType) => {
+    let diReport = '';
+    // 강수량 (0일땐 필요 없음)
+    const rainfullReport = getRainfullAmountReport(tempObj.pcp);
+    // 불쾌지수 계산 (0포함)
+    if (tempObj.reh && !isNaN(tempObj.tmp)) {
+        const di = getDiscomfortIndex(tempObj.reh, tempObj.tmp);
+        diReport = getDiscomfortIndexReport(di);
     }
-    return resultObj;
+    const windReport = getWindReport(tempObj.wsd);
+    const weatherReport: { [key: string]: string } = {
+        RAIN: rainfullReport,
+        DI: diReport,
+        WIND: windReport,
+    };
+    Object.entries(weatherReport).map(([key, value]) => {
+        console.log(key);
+        console.log(value);
+    });
+    return weatherReport;
+};
+
+/**
+ * 바람 세기 리포트
+ *
+ * @param wsd 풍속 m/s
+ */
+export const getWindReport = (wsd: number) => {
+    let report: string = '';
+    if (wsd >= 14) {
+        report = '4';
+    } else if (wsd >= 9 && wsd < 14) {
+        report = '3';
+    } else if (wsd >= 4 && wsd > 9) {
+        report = '2';
+    } else {
+        report = '1';
+    }
+    return report;
 };
 
 export const getRainfullAmountReport = (rainfullAmout: number) => {
     let report: string = '';
+    // 장화
     if (rainfullAmout >= 30) {
-        report = '매우 강한 비가 와요';
+        report = '4';
     } else if (rainfullAmout >= 15) {
-        report = '강한 비가 와요';
+        report = '3';
     } else if (rainfullAmout >= 3) {
-        report = '비가 와요';
+        report = '2';
+    } else if (rainfullAmout > 0) {
+        report = '1';
     } else {
-        report = '약한 비가 와요';
+        report = '';
     }
-};
-
-export const getPty = (obsrValue: string) => {
-    return CMM_CODE.PTY[obsrValue];
+    return report;
 };
 
 export const getDiscomfortIndex = (reh: number, t1h: number) => {
@@ -155,25 +172,167 @@ export const getDiscomfortIndexReport = (di: number) => {
     let diReport: string = '';
 
     if (di >= 80) {
-        diReport = '불쾌지수가 매우 높아요.';
+        diReport = '4';
     } else if (di >= 75 && 80 > di) {
-        diReport = '불쾌지수가 높아요.';
+        diReport = '3';
     } else if (di >= 68 && 75 > di) {
-        diReport = '다소 끈적끈적한 날이네요';
+        diReport = '2';
     } else {
-        diReport = '쾌적한 날이에요';
+        diReport = '1';
     }
 
     return diReport;
 };
 
-export const getWindChill = (reh: number, windSpeed: number) => {
-    const windSpeedKmS: number = windSpeed * 3.6;
-    const windSpeedSquare: number = windSpeedKmS ** 0.16;
+// 옷차림 추천
+export const getRecommendedOutfits = (
+    tempObj: temperatureStateType,
+    weatherReport: { [key: string]: string },
+    answer: string | string[] | undefined
+) => {
+    let result: recommndedOutfitListType = {
+        outfits: {
+            recmd: [],
+        },
+        mtr: {
+            recmd: [],
+        },
+    };
+    const newResult = getRecommendedOutfitsByWeather(tempObj.windChill, answer, result);
 
-    const result: number = 13.12 + 0.6215 * reh - 11.37 * windSpeedSquare + 0.3965 * windSpeedSquare * reh;
+    getSortedClothes(newResult.outfits.recmd);
+
+    return newResult;
+};
+
+/**
+ * 옷 분류 (상의, 하의, 아우터...)
+ *
+ * @param clothes    분류 전 옷
+ * @return sortClothes 분류한 옷
+ */
+const getSortedClothes = (clothes: string[]) => {
+    let sortedClothes: { [key: string]: string[] } = {
+        outer: [],
+        top: [],
+        bottom: [],
+        shoes: [],
+        bag: [],
+        acc: [],
+    };
+    for (var i = 0; i < clothes.length; i++) {
+        const value = clothes[i];
+        sortedClothes[OUTFITS[value].sort.toLowerCase()].push(value);
+    }
+    return sortedClothes;
+};
+
+/**
+ * 체감 기온별 옷차림 추천
+ *
+ * @param windChill 체감 온도
+ * @param answer    normal/sensitive_to_heat/sensitive_to_cold
+ * @param result    return 해야하는 Obj
+ */
+const getRecommendedOutfitsByWeather = (
+    windChill: number,
+    answer: string | string[] | undefined,
+    result: recommndedOutfitListType
+) => {
+    let newResult = result;
+    if (typeof answer === 'string') {
+        if (windChill >= 28) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[1][answer];
+        } else if (windChill >= 23 && 27 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[2][answer];
+        } else if (windChill >= 20 && 22 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[3][answer];
+        } else if (windChill >= 17 && 19 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[4][answer];
+        } else if (windChill >= 12 && 16 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[5][answer];
+        } else if (windChill >= 9 && 11 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[6][answer];
+        } else if (windChill >= 5 && 8 > windChill) {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[7][answer];
+        } else {
+            newResult['outfits']['recmd'] = RECOMMENDED_DATA.WEATHER_OUTFITS_RECMD[8][answer];
+        }
+    }
+
+    return newResult;
+};
+
+// 체감온도 계산
+const getSensibleTemp = (temp: number, reh: number, wsd: number) => {
+    const month = getCurrentSeason();
+
+    if (month >= 5 && month <= 9) {
+        return getInSummer(temp, reh);
+    } else {
+        return getWindChill(temp, wsd);
+    }
+};
+
+// 몇월인지
+const getCurrentSeason = () => {
+    const toady = new Date();
+    const month = toady.getMonth() + 1;
+    return month;
+};
+
+// 겨울 체감온도
+export const getWindChill = (temp: number, windSpeed: number) => {
+    if (10 < temp && windSpeed > 1.3) {
+        return windSpeed;
+    }
+    const windSpeedKmS: number = windSpeed * 3.6;
+
+    let result =
+        13.12 + 0.6215 * temp - 11.37 * Math.pow(windSpeedKmS, 0.16) + 0.3965 * Math.pow(windSpeedKmS, 0.16) * temp;
 
     return Number(result.toFixed(1));
+};
+
+// 여름 체감온도
+const getInSummer = (temp: number, reh: number) => {
+    const tw = getTw(temp, reh);
+
+    const result = -0.2442 + 0.55399 * tw + 0.45535 * temp - 0.0022 * Math.pow(tw, 2.0) + 0.00278 * tw * temp + 3.0;
+
+    return Number(result.toFixed(1));
+};
+
+/**
+ * 습구온도 계산공식
+ *
+ * @param ta 온도
+ * @param rh 상대습도
+ */
+const getTw = (temp: number, reh: number) => {
+    return (
+        temp * Math.atan(0.151977 * Math.pow(reh + 8.313659, 0.5)) +
+        Math.atan(temp + reh) -
+        Math.atan(reh - 1.67633) +
+        0.00391838 * Math.pow(reh, 1.5) * Math.atan(0.023101 * reh) -
+        4.686035
+    );
+};
+
+export const getTempUnit = (tempArr: string[]) => {
+    let resultObj: { [key: string]: string } = {};
+    for (var i = 0; i < tempArr!.length; i++) {
+        const category = tempArr![i];
+
+        if (NCST_DATA[category]) {
+            resultObj[category] = NCST_DATA[category].unit;
+        }
+    }
+    return resultObj;
+};
+
+export const getPty = (obsrValue: string) => {
+    return CMM_CODE.PTY[obsrValue];
 };
 
 export const getCurrPosition = async () => {
@@ -232,10 +391,11 @@ const formatToBaseTimeStr = (baseTime: number) => {
     let result: string;
 
     if (baseTimeStr.length === 3) {
-        result = '0' + baseTimeStr;
+        result = '0' + baseTimeStr.substring(0, 1) + '00';
+    } else {
+        result = baseTimeStr.substring(0, 2) + '00';
     }
 
-    result = baseTimeStr.substring(0, 2) + '00';
     return result;
 };
 

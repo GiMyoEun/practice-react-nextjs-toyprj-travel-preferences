@@ -25,3 +25,12 @@ export type temperatureStateType = {
     pop: number; // 강수확률
     pty: string; // 강수형태
 };
+
+export type recommndedOutfitListType = {
+    outfits: {
+        recmd: string[];
+    };
+    mtr: {
+        recmd: string[];
+    };
+};

@@ -1,9 +1,38 @@
-import { getPty } from '@/public/resources/common';
-import { temperatureStateType } from '@/public/resources/constants/type';
-import { NCST_DATA } from '@/public/resources/data/ncst';
+import { getPty, getRecommendedOutfits, getWeatherReport } from '@/public/resources/common';
+import { oufitsState, weatherReportState } from '@/public/resources/constants/state';
+import { recommndedOutfitListType, temperatureStateType } from '@/public/resources/constants/type';
+import { CMM_CODE, NCST_DATA, OUTFITS } from '@/public/resources/data/ncst';
 import { firstPageInnerContent, firstPageText, firstPageTitle } from '@/styles/styles';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
 
 const CurrTemp = (props: { tempt: temperatureStateType }) => {
+    const [weatherReport, setWeatherReport] = useRecoilState(weatherReportState);
+    const [outfits, setOutfits] = useRecoilState(oufitsState);
+    const router = useRouter();
+    const answer: string | string[] | undefined = router.query.answer;
+    let recommendedOutfits = {
+        top: '',
+    };
+
+    useEffect(() => {
+        const weatherReport: { [key: string]: string } = getWeatherReport(props.tempt);
+        const outfits: recommndedOutfitListType = getRecommendedOutfits(props.tempt, weatherReport, answer);
+
+        setWeatherReport({
+            isReady: true,
+            rain: weatherReport['RAIN'],
+            di: weatherReport['DI'],
+            wind: weatherReport['WIND'],
+        });
+        setOutfits({
+            isReady: true,
+            outfits: outfits.outfits.recmd,
+            mtr: outfits.mtr.recmd,
+        });
+    }, []);
+
     const windChill = props.tempt.windChill;
     const reh = props.tempt.reh;
     const wsd = props.tempt.wsd;
@@ -39,6 +68,25 @@ const CurrTemp = (props: { tempt: temperatureStateType }) => {
                         </>
                     )}
                 </div>
+                {weatherReport.isReady && (
+                    <>
+                        <div className="text-[13px] mt-0 text-green-950 pt-2 font-bold text-left">
+                            {weatherReport.rain && <p>{CMM_CODE['RAIN'][`${weatherReport.rain}`]}</p>}
+                            {weatherReport.wind && <p>{CMM_CODE['WIND'][`${weatherReport.wind}`]}</p>}
+                            {weatherReport.di && <p>{CMM_CODE['DI'][`${weatherReport.di}`]}</p>}
+                        </div>
+                    </>
+                )}
+
+                {outfits.isReady && (
+                    <>
+                        <div className="text-[13px] mt-0 text-green-950 pt-2 font-bold text-left">
+                            {outfits.outfits.map((value: string) => (
+                                <p>{OUTFITS[value]['name']}</p>
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );
