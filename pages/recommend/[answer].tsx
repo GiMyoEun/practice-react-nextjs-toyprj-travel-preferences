@@ -6,7 +6,7 @@ import Proceeding from '@/UI/Proceeding';
 import { useRecoilState } from 'recoil';
 import { temperatureState } from '@/public/resources/constants/state';
 
-import { getVillageFcstInfo } from '../api/hello';
+import { getVillageFcstInfo } from '../api/fetchFcst';
 import { useEffect } from 'react';
 import { temperatureStateType } from '@/public/resources/constants/type';
 
