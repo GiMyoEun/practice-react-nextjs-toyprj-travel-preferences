@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 import BgImgContent from '@/UI/BgImgContent';
-import BgImgBtn from '@/UI/BgImgBtn';
+
 import Proceeding from '@/UI/Proceeding';
 import { useRecoilState } from 'recoil';
 import { temperatureState } from '@/public/resources/constants/state';

@@ -1,10 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { analyzeTempt, getBaseDate, getBaseTime, getCurrPosition } from '@/public/resources/common';
 import { temptType } from '@/public/resources/constants/type';
-import { NCST_DATA } from '@/public/resources/data/ncst';
-import { rejects } from 'assert';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { type } from 'os';
 
 type Data = {
     name: string;
