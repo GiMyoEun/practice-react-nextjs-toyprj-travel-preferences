@@ -34,3 +34,5 @@ export type recommndedOutfitListType = {
         recmd: string[];
     };
 };
+
+export type sortedClothesType = { [key: string]: string[] };

@@ -6,6 +6,7 @@ import { firstPageInnerContent, firstPageText, firstPageTitle } from '@/styles/s
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
+import CurrRcmdOutfits from './CurrRcmdOufits';
 
 const CurrTemp = (props: { tempt: temperatureStateType }) => {
     const [weatherReport, setWeatherReport] = useRecoilState(weatherReportState);
@@ -44,7 +45,7 @@ const CurrTemp = (props: { tempt: temperatureStateType }) => {
 
     return (
         <>
-            <div className="align-baseline flex flex-col pt-8 h-64 w-96 mx-auto bg-white opacity-40 items-center">
+            <div className="align-baseline flex flex-col pt-8 h-auto pb-8 max-w-[400px] mx-auto bg-white opacity-40 items-center">
                 {!isNaN(tmp) && (
                     <h1 className="text-3xl flex flex-col text-green-950 opacity-100 subpixel-antialiased font-bold">{`현재 기온은 ${tmp}${NCST_DATA['T1H'].unit}`}</h1>
                 )}
@@ -80,11 +81,7 @@ const CurrTemp = (props: { tempt: temperatureStateType }) => {
 
                 {outfits.isReady && (
                     <>
-                        <div className="text-[13px] mt-0 text-green-950 pt-2 font-bold text-left">
-                            {outfits.outfits.map((value: string) => (
-                                <p>{OUTFITS[value]['name']}</p>
-                            ))}
-                        </div>
+                        <CurrRcmdOutfits sortedClothes={outfits.outfits} />
                     </>
                 )}
             </div>

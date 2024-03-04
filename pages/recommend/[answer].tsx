@@ -38,7 +38,7 @@ const Recommendation = () => {
                 {!tempt.isReady && <Proceeding title="열심히 찾고있어요" />}
                 {tempt.isReady && <CurrTemp tempt={tempt} />}
 
-                <BgImgBtn onClickBtn={() => {}} title="목록" />
+                {/* <BgImgBtn onClickBtn={() => {}} title="목록" /> */}
             </BgImgContent>
         </>
     );

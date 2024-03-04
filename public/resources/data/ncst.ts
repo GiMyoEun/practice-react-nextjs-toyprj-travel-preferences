@@ -20,8 +20,8 @@ export const CMM_CODE: {
         4: '매우 강한 비가 와요',
     },
     WIND: {
-        1: '바람이 약하게 불어요',
-        2: '바람이 약간 강하게 불어요',
+        1: '바람이 조금 불어요',
+        2: '바람이 조금 강하게 불어요',
         3: '바람이 강하게 불어요',
         4: '바람이 매우 강하게 불어요',
     },
@@ -125,6 +125,15 @@ export const OUTFITS: {
         name: '후드티',
         sort: 'TOP',
     },
+    F_HOOD: {
+        name: '기모 후드티',
+        sort: 'TOP',
+    },
+    F_MTM: {
+        name: '기모 맨투맨',
+        sort: 'TOP',
+    },
+
     SHR: {
         name: '반바지',
         sort: 'BOTTOM',
@@ -201,6 +210,10 @@ export const OUTFITS: {
         name: '우산',
         sort: 'ACC',
     },
+    GLVS: {
+        name: '장갑',
+        sort: 'ACC',
+    },
 };
 
 export const RECOMMENDED_DATA: {
@@ -244,21 +257,61 @@ export const RECOMMENDED_DATA: {
         },
         6: {
             //9℃ ~ 11℃
-            normal: ['TRN_CT', 'JMP', 'STK', 'F_PNTS'],
+            normal: ['W_COAT', 'KNIT', 'MTM', 'HOOD', 'L_PNTS', 'JEANS'],
             sensitive_to_heat: ['T_COAT', 'W_COAT', 'JMP', 'STK', 'JEANS'],
-            sensitive_to_cold: ['T_COAT', 'W_COAT', 'JMP', 'STK', 'F_PNTS'],
+            sensitive_to_cold: ['T_COAT', 'W_COAT', 'JMP', 'HTT', 'KNIT', 'MTM', 'HOOD', 'F_MTM', 'F_HOOD', 'F_PNTS'],
         },
         7: {
             //5℃ ~ 8℃
-            normal: ['W_COAT', 'HTT', 'F_PNTS'],
-            sensitive_to_heat: ['PADD', 'T_COAT', 'QLT', 'HTT', 'F_PNTS'],
-            sensitive_to_cold: ['PADD', 'T_COAT', 'QLT', 'W_COAT', 'KNIT', 'HOOD', 'HTT', 'JEANS', 'F_PNTS'],
+            normal: ['PADD', 'T_COAT', 'QLT', 'KNIT', 'MTM', 'HOOD', 'L_PNTS', 'MFLR'],
+            sensitive_to_heat: ['T_COAT', 'QLT', 'W_COAT', 'JMP', 'MTM', 'HOOD', 'L_SLV', 'L_PNTS', 'JEANS'],
+            sensitive_to_cold: [
+                'PADD',
+                'T_COAT',
+                'QLT',
+                'HTT',
+                'KNIT',
+                'F_MTM',
+                'F_HOOD',
+                'F_PNTS',
+                'MFLR',
+                'K_HAT',
+                'GLVS',
+            ],
         },
         8: {
             //4℃ 이하
-            normal: ['PADD', 'T_COAT', 'QLT', 'MFLR', 'K_HAT'],
-            sensitive_to_heat: ['PADD', 'T_COAT', 'QLT', 'MFLR', 'K_HAT'],
-            sensitive_to_cold: ['PADD', 'T_COAT', 'QLT', 'MFLR', 'K_HAT'],
+            normal: ['PADD', 'T_COAT', 'QLT', 'HTT', 'KNIT', 'F_MTM', 'F_HOOD', 'F_PNTS', 'MFLR', 'K_HAT', 'GLVS'],
+            sensitive_to_heat: [
+                'PADD',
+                'T_COAT',
+                'QLT',
+                'HTT',
+                'KNIT',
+                'MTM',
+                'HOOD',
+                'F_MTM',
+                'F_HOOD',
+                'L_PNTS',
+                'F_PNTS',
+
+                'MFLR',
+                'K_HAT',
+                'GLVS',
+            ],
+            sensitive_to_cold: [
+                'PADD',
+                'T_COAT',
+                'QLT',
+                'HTT',
+                'KNIT',
+                'F_MTM',
+                'F_HOOD',
+                'F_PNTS',
+                'MFLR',
+                'K_HAT',
+                'GLVS',
+            ],
         },
     },
     WEATHER_MTR_RECMD: {

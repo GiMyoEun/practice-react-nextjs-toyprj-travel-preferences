@@ -1,4 +1,4 @@
-import { recommndedOutfitListType, temperatureStateType, temptType } from './constants/type';
+import { recommndedOutfitListType, sortedClothesType, temperatureStateType, temptType } from './constants/type';
 import { CMM_CODE, NCST_DATA, OUTFITS, RECOMMENDED_DATA } from './data/ncst';
 
 export const analyzeTempt = (temptArr: temptType[]) => {
@@ -200,7 +200,7 @@ export const getRecommendedOutfits = (
     };
     const newResult = getRecommendedOutfitsByWeather(tempObj.windChill, answer, result);
 
-    getSortedClothes(newResult.outfits.recmd);
+    const sortedRcmdClothes = getSortedClothes(newResult.outfits.recmd);
 
     return newResult;
 };
@@ -211,8 +211,8 @@ export const getRecommendedOutfits = (
  * @param clothes    분류 전 옷
  * @return sortClothes 분류한 옷
  */
-const getSortedClothes = (clothes: string[]) => {
-    let sortedClothes: { [key: string]: string[] } = {
+export const getSortedClothes = (clothes: string[]) => {
+    let sortedClothes: sortedClothesType = {
         outer: [],
         top: [],
         bottom: [],
