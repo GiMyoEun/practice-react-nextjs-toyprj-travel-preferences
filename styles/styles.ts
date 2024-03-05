@@ -83,3 +83,31 @@ export const alerteButtonDiv = 'mt-6';
 
 export const alerteButton =
     'text-sm text-[#d24545] font-bold rounded-lg p-2 bg-[#E6BAA3] hover:opacity-70 bg-white active:opacity-70 bg-white focus:opacity-70 bg-white';
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const currTempContent =
+    'align-baseline flex flex-col pt-8 h-auto pb-8 max-w-[400px] mx-auto bg-white opacity-40 items-center';
+
+export const currTempH1 = 'text-3xl flex flex-col text-green-950 opacity-100 subpixel-antialiased font-bold';
+
+export const currTempInnerContent = 'text-[13px] flex items-center text-green-950 mt-0 pt-2 pb-2 font-bold';
+
+export const currTempInnerContentRain = 'flex items-center text-green-950 mt-0 font-bold';
+
+export const currTempInnerContentRainIcon = 'text-[23px]';
+
+export const currTempInnerContentRainText = 'text-[13px]';
+
+export const currTempWeatherReportInnerConent = 'text-[13px] pb-4 mt-0 text-green-950 font-bold text-left';
+
+export const currTempWeatherReportP = 'pt-1';
+
+export const currTempRcmdOutfitsInnerConent = 'text-[13px] mt-0 flex flex-col text-green-950 pt-2 font-bold text-left';
+
+export const currTempRcmdOutfitConent = 'flex w-auto';
+
+export const currTempRcmdOutfitSortType = 'text-[15px] w-20 ml-[5px]';
+
+export const currTempRcmdOutfitText = 'flex mr-[5px]';
+
+export const currTempRcmdOutfitTextEnd = 'flex mr-[2px]';

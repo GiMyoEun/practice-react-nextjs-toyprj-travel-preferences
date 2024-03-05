@@ -1,11 +1,8 @@
 import { recommndedOutfitListType, sortedClothesType, temperatureStateType, temptType } from './constants/type';
 import { CMM_CODE, NCST_DATA, OUTFITS, RECOMMENDED_DATA } from './data/ncst';
 
-export const analyzeTempt = (temptArr: temptType[]) => {
-    //   const [temperature, setTemperature] = useRecoilState(temperatureState);
-
-    // 결과 객체
-    /*
+// 결과 객체
+/*
         resultCode : 결과코드,
         resultMsg : 결과메시지,
         numOfRows : 한 페이지 결과 수,
@@ -20,6 +17,16 @@ export const analyzeTempt = (temptArr: temptType[]) => {
         obsrValue : RN1, T1H, UUU, VVV, WSD 실수로 제공,
 
         */
+/**
+ * 체감 기온별 옷차림 추천
+ *
+ * @param temptArr 기온 정보 배열
+ * @return temp 분석한 기온
+
+ */
+export const analyzeTempt = (temptArr: temptType[]) => {
+    //   const [temperature, setTemperature] = useRecoilState(temperatureState);
+
     let windChill: number = 0; // 체감온도
     let reh: number = 0; // 습도
     let wsd: number = 0; // 풍속
@@ -80,6 +87,7 @@ export const analyzeTempt = (temptArr: temptType[]) => {
         windChill = getSensibleTemp(t1h || tmp, reh, wsd);
         console.log('체감온도 : ' + windChill);
     }
+
     // 강수형태 (0포함)
     if (pty) {
         console.log('강수형태 : ' + pty);
@@ -88,38 +96,46 @@ export const analyzeTempt = (temptArr: temptType[]) => {
     const temp = {
         isReady: true,
         windChill: windChill, // 체감온도
-        reh: reh, // 습도
-        wsd: wsd, // 풍속
+        reh, // 습도
+        wsd, // 풍속
         tmp: t1h || tmp, // 기온
-        pcp: rn1 || pcp, // 강수량
-        pop: pop, // 강수확률
-        pty: pty, // 강수형태
+        pcp, // 강수량
+        pop, // 강수확률
+        pty, //TODO 강수형태
     };
 
     return temp;
-
-    // setTemperature(temp);
 };
 
+/**
+ * 예보 리포트 정보 받기
+ *
+ * @param tempObj 분석한 기온
+ * @return weatherReport 예보리포트(강수량리포트, 불쾌지수리포트, 풍속리포트)
+
+ */
 export const getWeatherReport = (tempObj: temperatureStateType) => {
     let diReport = '';
+
     // 강수량 (0일땐 필요 없음)
-    const rainfullReport = getRainfullAmountReport(tempObj.pcp);
+    const rainfullReport = getRainfullAmountReport(tempObj.pcp, tempObj.pty);
+
     // 불쾌지수 계산 (0포함)
     if (tempObj.reh && !isNaN(tempObj.tmp)) {
-        const di = getDiscomfortIndex(tempObj.reh, tempObj.tmp);
-        diReport = getDiscomfortIndexReport(di);
+        diReport = getRehReport(tempObj.reh, tempObj.tmp);
     }
     const windReport = getWindReport(tempObj.wsd);
+
     const weatherReport: { [key: string]: string } = {
         RAIN: rainfullReport,
         DI: diReport,
         WIND: windReport,
     };
-    Object.entries(weatherReport).map(([key, value]) => {
-        console.log(key);
-        console.log(value);
-    });
+
+    // Object.entries(weatherReport).map(([key, value]) => {
+    //     console.log(key);
+    //     console.log(value);
+    // });
     return weatherReport;
 };
 
@@ -127,6 +143,7 @@ export const getWeatherReport = (tempObj: temperatureStateType) => {
  * 바람 세기 리포트
  *
  * @param wsd 풍속 m/s
+ * @return report 바람 리포트 코드
  */
 export const getWindReport = (wsd: number) => {
     let report: string = '';
@@ -142,23 +159,85 @@ export const getWindReport = (wsd: number) => {
     return report;
 };
 
-export const getRainfullAmountReport = (rainfullAmout: number) => {
+/**
+ * 강수량 리포트
+ *
+ * @param rainfullAmout 강수량 mm
+ * @param pty 강수형태
+ * @return report 강수 리포트 코드
+ */
+export const getRainfullAmountReport = (rainfullAmout: number, pty: string) => {
     let report: string = '';
     // 장화
     if (rainfullAmout >= 30) {
-        report = '4';
+        report = CMM_CODE['RAIN']['4'];
     } else if (rainfullAmout >= 15) {
-        report = '3';
+        report = CMM_CODE['RAIN']['3'];
     } else if (rainfullAmout >= 3) {
-        report = '2';
+        report = CMM_CODE['RAIN']['2'];
     } else if (rainfullAmout > 0) {
-        report = '1';
+        report = CMM_CODE['RAIN']['1'];
     } else {
         report = '';
+    }
+
+    if (report) {
+        report += getPty(pty) + ' 가(이) 내려와요';
     }
     return report;
 };
 
+/**
+ * 불쾌지수/습도 리포트 구하기 (여름/겨울별)
+ *
+ * @param reh 습도
+ * @param t1h 기온
+ * @return result 불쾌지수/습도 리포트
+ */
+const getRehReport = (reh: number, tmp: number) => {
+    let result = '';
+    const month = getCurrentSeason();
+
+    if (month >= 5 && month <= 9) {
+        const di = getDiscomfortIndex(reh, tmp);
+        result = getDiscomfortIndexReport(di);
+    } else {
+        result = getRehWinterReport(reh, tmp);
+    }
+    return result;
+};
+
+/**
+ * 불쾌지수/습도 리포트 구하기
+ *
+ * @param reh 습도
+ * @param t1h 기온
+ * @return result 불쾌지수/습도 리포트
+ */
+const getRehWinterReport = (reh: number, tmp: number) => {
+    let result = '';
+    if (tmp >= 21) {
+        const di = getDiscomfortIndex(reh, tmp);
+        result = getDiscomfortIndexReport(di);
+    } else {
+        if (reh > 60) {
+            result = '2';
+        } else if (reh >= 40 && reh <= 60) {
+            result = '1';
+        } else {
+            result = '5';
+        }
+    }
+    return result;
+};
+
+/**
+ * 불쾌지수 구하기
+ *
+ * @param reh 습도
+ * @param t1h 기온
+ * @return result 불쾌지수
+ */
 export const getDiscomfortIndex = (reh: number, t1h: number) => {
     //[불쾌지수=1.8x기온–0.55x(1–습도)x(1.8x기온–26)+32]
 
@@ -168,6 +247,12 @@ export const getDiscomfortIndex = (reh: number, t1h: number) => {
     return result;
 };
 
+/**
+ * 불쾌지수 리포트
+ *
+ * @param di 불쾌지수
+ * @return diReport 불쾌지수 코드
+ */
 export const getDiscomfortIndexReport = (di: number) => {
     let diReport: string = '';
 
@@ -184,7 +269,14 @@ export const getDiscomfortIndexReport = (di: number) => {
     return diReport;
 };
 
-// 옷차림 추천
+/**
+ * 옷차림 추천
+ *
+ * @param tempObj 분석한 기온
+ * @param weatherReport weatherReport 예보리포트(강수량리포트, 불쾌지수리포트, 풍속리포트)
+ * @param answer 'sensitive_to_cold'/'sensitive_to_heat'/normal
+ * @return newResult 추천하는 옷차림 Obj
+ */
 export const getRecommendedOutfits = (
     tempObj: temperatureStateType,
     weatherReport: { [key: string]: string },
@@ -198,12 +290,89 @@ export const getRecommendedOutfits = (
             recmd: [],
         },
     };
-    const newResult = getRecommendedOutfitsByWeather(tempObj.windChill, answer, result);
+    let newResult = getRecommendedOutfitsByWeather(tempObj.windChill, answer, result);
+    newResult = getRecommendedOutfitsPty(newResult, tempObj.pty);
 
-    const sortedRcmdClothes = getSortedClothes(newResult.outfits.recmd);
+    // const sortedRcmdClothes = getSortedClothes(newResult.outfits.recmd);
 
     return newResult;
 };
+
+/**
+ * 비/눈 올 때 옷 추천
+ *
+ * @param newResult 업데이트 전 옷 추천리스트
+ * @param pty     강수코드
+ * @return newResult 업데이트된 옷 추천 리스트
+ */
+export const getRecommendedOutfitsPty = (newResult: recommndedOutfitListType, pty: string) => {
+    const month = getCurrentSeason();
+    switch (pty) {
+        case '0':
+            newResult = newResult;
+            break;
+        case '1':
+        case '4':
+        case '5': // 비
+            newResult = getRecommendedOutfitsRaining(newResult, month, 'RAIN');
+            break;
+        case '2':
+        case '3':
+        case '6':
+        case '7': // 눈
+            newResult = getRecommendedOutfitsRaining(newResult, month, 'SNOW');
+            break;
+    }
+    // if (pty === '0') {
+    //     return newResult;
+    // } else if() {
+
+    //     if (month >= 5 && month <= 9) {
+    //         newResult.outfits.recmd = getConcatArr(newResult.outfits.recmd, RECOMMENDED_DATA.RAIN['SUMMER']['rcmd']);
+    //     } else {
+    //         newResult.outfits.recmd = getConcatArr(newResult.outfits.recmd, RECOMMENDED_DATA.RAIN['WINTER']['rcmd']);
+    //     }
+    // }
+
+    return newResult;
+};
+
+/**
+ * 비 올 때 옷 추천
+ *
+ * @param newResult 업데이트 전 옷 추천 리스트
+ * @param month     달
+ * @return newResult 업데이트된 옷 추천 리스트
+ */
+export const getRecommendedOutfitsRaining = (newResult: recommndedOutfitListType, month: number, type: string) => {
+    if (month >= 5 && month <= 9) {
+        if (type === 'SNOW') return newResult;
+        newResult.outfits.recmd = getConcatArr(newResult.outfits.recmd, RECOMMENDED_DATA[type]['SUMMER']['rcmd']);
+    } else {
+        newResult.outfits.recmd = getConcatArr(newResult.outfits.recmd, RECOMMENDED_DATA[type]['WINTER']['rcmd']);
+    }
+    return newResult;
+};
+
+/**
+ * 중복없이 배열 합치기
+ *
+ * @param clothes    분류 전 옷
+ * @return sortClothes 분류한 옷
+ */
+export const getConcatArr = (arr1: string[], arr2: string[]) => {
+    let newArr = arr1.concat(arr2);
+    newArr = newArr.filter((item, pos) => newArr.indexOf(item) === pos);
+    return newArr;
+};
+
+/**
+ * 타겟 요소 제거하기
+ *
+ * @param clothes    분류 전 옷
+ * @return sortClothes 분류한 옷
+ */
+export const deleteTargetElements = (arr1: string[], targetElms: string[]) => {};
 
 /**
  * 옷 분류 (상의, 하의, 아우터...)
@@ -233,6 +402,8 @@ export const getSortedClothes = (clothes: string[]) => {
  * @param windChill 체감 온도
  * @param answer    normal/sensitive_to_heat/sensitive_to_cold
  * @param result    return 해야하는 Obj
+ * @return newResult    기온별 옷차림 Obj
+ *
  */
 const getRecommendedOutfitsByWeather = (
     windChill: number,
@@ -263,7 +434,15 @@ const getRecommendedOutfitsByWeather = (
     return newResult;
 };
 
-// 체감온도 계산
+/**
+ * 체감 온도 계산
+ *
+ * @param temp 기온
+ * @param reh  습도 %
+ * @param wsd  풍속 m/s
+ * @return result 체감온도
+ *
+ */
 const getSensibleTemp = (temp: number, reh: number, wsd: number) => {
     const month = getCurrentSeason();
 
@@ -274,14 +453,23 @@ const getSensibleTemp = (temp: number, reh: number, wsd: number) => {
     }
 };
 
-// 몇월인지
+/**
+ * 현재 달
+ * @return month 현재 달
+ *
+ */
 const getCurrentSeason = () => {
     const toady = new Date();
     const month = toady.getMonth() + 1;
     return month;
 };
 
-// 겨울 체감온도
+/**
+ * 겨울 체감온도
+ * @param temp 기온
+ * @param windSpeed 풍속 m/s
+ * @return Number(result.toFixed(1)) 체감온도
+ */
 export const getWindChill = (temp: number, windSpeed: number) => {
     if (10 < temp && windSpeed > 1.3) {
         return windSpeed;
@@ -294,7 +482,12 @@ export const getWindChill = (temp: number, windSpeed: number) => {
     return Number(result.toFixed(1));
 };
 
-// 여름 체감온도
+/**
+ * 여름 체감온도
+ * @param temp 기온
+ * @param reh 습도 %
+ * @return Number(result.toFixed(1)) 체감온도
+ */
 const getInSummer = (temp: number, reh: number) => {
     const tw = getTw(temp, reh);
 
@@ -306,8 +499,9 @@ const getInSummer = (temp: number, reh: number) => {
 /**
  * 습구온도 계산공식
  *
- * @param ta 온도
- * @param rh 상대습도
+ * @param temp 온도
+ * @param reh 상대습도
+ * @return result 습구온도
  */
 const getTw = (temp: number, reh: number) => {
     return (
@@ -319,6 +513,12 @@ const getTw = (temp: number, reh: number) => {
     );
 };
 
+/**
+ *
+ *
+ * @param tempArr
+ * @return resultObj
+ */
 export const getTempUnit = (tempArr: string[]) => {
     let resultObj: { [key: string]: string } = {};
     for (var i = 0; i < tempArr!.length; i++) {
@@ -331,6 +531,12 @@ export const getTempUnit = (tempArr: string[]) => {
     return resultObj;
 };
 
+/**
+ * 강수형태 코드를 텍스트로 가져오기
+ *
+ * @param obsrValue 강수형태코드
+ * @return result 강수형태 텍스트
+ */
 export const getPty = (obsrValue: string) => {
     return CMM_CODE.PTY[obsrValue];
 };
@@ -363,7 +569,14 @@ export const getCurrPosition = async () => {
 //❍단기예보
 //- Base_time : 0200, 0500, 0800, 1100, 1400, 1700, 2000, 2300 (1일 8회)
 //- API 제공 시간(~이후) : 02:10, 05:10, 08:10, 11:10, 14:10, 17:10, 20:10, 23:10
-//1410 < 1626 < 1710
+// 1410 < 1626 < 1710
+/**
+ * baseTime 단기예보를 위한 basTime 시간 가져오기
+ *
+ * @return result {curr : 현재시간 기준 정시,
+ *                 close : 현재시간과 가까운 정시,
+ *                 smaller: close시간보다 한시간 전인 정시 }
+ */
 export const getBaseTime = () => {
     const baseTime: number[] = [210, 510, 810, 1110, 1410, 1710, 2010, 2310];
     var today = new Date();
@@ -386,6 +599,12 @@ export const getBaseTime = () => {
     };
 };
 
+/**
+ * baseTime 시간을 단기예보 조회 param으로 보내기 위한 정시 bastime 스트링으로 변환
+ *
+ * @param baseTime 시간
+ * @return result 시간을 string으로 변환
+ */
 const formatToBaseTimeStr = (baseTime: number) => {
     const baseTimeStr = baseTime.toString();
     let result: string;
@@ -399,6 +618,13 @@ const formatToBaseTimeStr = (baseTime: number) => {
     return result;
 };
 
+/**
+ * n 보다 작은 숫자 구하기
+ * @param baseTime
+ * @param n 타겟 숫자
+ *
+ * @return result n 보다 작은 숫자
+ */
 const getSmallerNumber = (baseTime: number[], n: number) => {
     let result: number = n;
     for (var i = 0; i < baseTime.length; i++) {
@@ -413,6 +639,13 @@ const getSmallerNumber = (baseTime: number[], n: number) => {
     return result;
 };
 
+/**
+ * 가까운 숫자 구하기
+ * @param array 숫자 후보 배열
+ * @param n 타겟 숫자
+ *
+ * @return array[indexOfMin] 가까운 숫자
+ */
 const getCloseNumber = (array: number[], n: number) => {
     let ans: number[] = [];
 
@@ -434,6 +667,11 @@ const getCloseNumber = (array: number[], n: number) => {
     return array[indexOfMin];
 };
 
+/**
+ * 오늘 yyyymmdd
+ *
+ * @return yyyymmdd
+ */
 export const getBaseDate = () => {
     const today = new Date();
 
@@ -449,6 +687,14 @@ export const getBaseDate = () => {
     return yyyymmdd;
 };
 
+/**
+ * 위경도를 XY 좌표로, XY 좌표를 위경도로 변환
+ *
+ * @param code 'toXY' / ''
+ * @param v1 위도 혹은 X 좌표
+ * @param v2 경도 혹은 Y 좌표
+ * @return rs 위경도 ,혹은 xy 좌표 obj
+ */
 function dfs_xy_conv(code: string, v1: number, v2: number) {
     var RE = 6371.00877; // 지구 반경(km)
     var GRID = 5.0; // 격자 간격(km)

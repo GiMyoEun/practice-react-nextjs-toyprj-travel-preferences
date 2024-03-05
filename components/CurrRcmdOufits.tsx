@@ -1,14 +1,14 @@
 import { getSortedClothes } from '@/public/resources/common';
 import { sortedClothesType } from '@/public/resources/constants/type';
-import { OUTFITS } from '@/public/resources/data/ncst';
 import CurrRcmdOutfit from './CurrRcmdOutfit';
+import { currTempRcmdOutfitsInnerConent } from '@/styles/styles';
 
 const CurrRcmdOutfits = (props: { sortedClothes: string[] }) => {
     const newSortedClothes: sortedClothesType = getSortedClothes(props.sortedClothes);
 
     return (
         <>
-            <div className="text-[13px] mt-0 flex flex-col text-green-950 pt-2 font-bold text-left">
+            <div className={currTempRcmdOutfitsInnerConent}>
                 <CurrRcmdOutfit outfitArr={newSortedClothes.outer} sortType="아우터" />
                 <CurrRcmdOutfit outfitArr={newSortedClothes.top} sortType="상의" />
                 <CurrRcmdOutfit outfitArr={newSortedClothes.bottom} sortType="하의" />

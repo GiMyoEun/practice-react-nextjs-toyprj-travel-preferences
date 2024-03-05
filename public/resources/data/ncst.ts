@@ -14,10 +14,10 @@ export const CMM_CODE: {
         7: '눈날림',
     },
     RAIN: {
-        1: '약한 비가 와요',
-        2: '비가 와요',
-        3: '강한 비가 와요',
-        4: '매우 강한 비가 와요',
+        1: '약한 ',
+        2: '',
+        3: '강한 ',
+        4: '매우 강한 ',
     },
     WIND: {
         1: '바람이 조금 불어요',
@@ -30,6 +30,7 @@ export const CMM_CODE: {
         2: '다소 습한 날이에요',
         3: '불쾌지수가 높아요',
         4: '불쾌지수가 매우 높아요',
+        5: '좀 건조한 날이네요',
     },
     OUTFITS: {
         OUTER: '아우터',
@@ -171,8 +172,8 @@ export const OUTFITS: {
         sort: 'ACC',
     },
     K_HAT: {
-        name: '얇은 가디건',
-        sort: 'OUTER',
+        name: '니트 모자',
+        sort: 'ACC',
     },
     HAT: {
         name: '모자',
@@ -194,9 +195,14 @@ export const OUTFITS: {
         name: '스웨이드',
         sort: 'SHOES',
     },
+    BOOTS: {
+        name: '장화',
+        sort: 'SHOES',
+    },
+
     F_BOOTS: {
-        name: '얇은 가디건',
-        sort: 'OUTER',
+        name: '털부츠',
+        sort: 'SHOES',
     },
     TTB: {
         name: '토트백', //눈길에 ,
@@ -223,6 +229,26 @@ export const RECOMMENDED_DATA: {
         };
     };
 } = {
+    RAIN: {
+        SUMMER: {
+            rcmd: ['UMB', 'BOOTS'],
+            unrcmd: ['L_SHOES', 'SWD_SHOES', 'SNK'],
+            check: ['JEANS', 'KNIT'],
+        },
+        WINTER: {
+            rcmd: ['UMB', 'BOOTS'],
+            unrcmd: ['L_SHOES', 'SWD_SHOES', 'SNK'],
+            check: ['W_COAT', 'JEANS', 'KNIT'],
+        },
+    },
+    SNOW: {
+        WINTER: {
+            rcmd: ['UMB'],
+            unrcmd: ['L_SHOES', 'SWD_SHOES', 'SNK', 'F_BOOTS'],
+            check: ['W_COAT', 'JEANS', 'KNIT'],
+        },
+    },
+
     //체감 기온별로
     WEATHER_OUTFITS_RECMD: {
         1: {
@@ -295,7 +321,6 @@ export const RECOMMENDED_DATA: {
                 'F_HOOD',
                 'L_PNTS',
                 'F_PNTS',
-
                 'MFLR',
                 'K_HAT',
                 'GLVS',
@@ -315,6 +340,7 @@ export const RECOMMENDED_DATA: {
             ],
         },
     },
+
     WEATHER_MTR_RECMD: {
         1: {
             normal: ['SLV', 'S_SLV', 'SHR', 'SHR_SKR', 'SND'],
