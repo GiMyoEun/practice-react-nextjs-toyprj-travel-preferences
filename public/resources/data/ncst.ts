@@ -229,13 +229,13 @@ export const RECOMMENDED_DATA: {
             //'28℃ 이상'
             normal: ['SLV', 'S_SLV', 'SHR', 'SHR_SKR', 'SND'],
             sensitive_to_heat: ['SLV', 'S_SLV', 'SHR', 'SHR_SKR', 'SND'],
-            sensitive_to_cold: ['SLV', 'S_SLV', 'SHR', 'SHR_SKR', 'SND', 'THN_CRD', 'LN_PNTS'],
+            sensitive_to_cold: ['SLV', 'S_SLV', 'SHR', 'THIN_SHIRT', 'THN_CRD', 'SHR_SKR', 'SND', 'LN_PNTS'],
         },
         2: {
             //'23℃ ~ 27℃'
-            normal: ['S_SLV', 'SHR', 'SHR_SKR'],
+            normal: ['S_SLV', 'THIN_SHIRT', 'SHR', 'SHR_SKR'],
             sensitive_to_heat: ['SLV', 'S_SLV', 'SHR', 'SHR_SKR', 'SND'],
-            sensitive_to_cold: ['S_SLV', 'SHR', 'SHR_SKR', 'THN_CRD', 'LN_PNTS'],
+            sensitive_to_cold: ['S_SLV', 'THIN_SHIRT', 'THN_CRD', 'SHR', 'SHR_SKR', 'LN_PNTS'],
         },
         3: {
             //'20℃ ~ 22℃'
@@ -246,24 +246,24 @@ export const RECOMMENDED_DATA: {
         4: {
             //'17℃ ~ 19℃'
             normal: ['THN_CRD', 'KNIT', 'MTM', 'HOOD', 'L_PNTS'],
-            sensitive_to_heat: ['THN_CRD', 'KNIT', 'MTM', 'HOOD', 'L_PNTS'],
+            sensitive_to_heat: ['THN_CRD', 'KNIT', 'MTM', 'HOOD', 'L_SLV', 'L_PNTS'],
             sensitive_to_cold: ['THN_CRD', 'KNIT', 'MTM', 'HOOD', 'L_PNTS'],
         },
         5: {
             //'12℃ ~ 16℃'
             normal: ['JCK', 'CRD', 'KNIT', 'STK', 'JEANS'],
             sensitive_to_heat: ['JCK', 'CRD', 'KNIT', 'STK', 'JEANS'],
-            sensitive_to_cold: ['JCK', 'CRD', 'KNIT', 'STK', 'JEANS'],
+            sensitive_to_cold: ['JMP', 'JCK', 'CRD', 'KNIT', 'MTM', 'HOOD', 'STK', 'JEANS'],
         },
         6: {
             //9℃ ~ 11℃
             normal: ['W_COAT', 'KNIT', 'MTM', 'HOOD', 'L_PNTS', 'JEANS'],
-            sensitive_to_heat: ['T_COAT', 'W_COAT', 'JMP', 'STK', 'JEANS'],
+            sensitive_to_heat: ['T_COAT', 'W_COAT', 'JMP', 'L_SLV', 'STK', 'JEANS'],
             sensitive_to_cold: ['T_COAT', 'W_COAT', 'JMP', 'HTT', 'KNIT', 'MTM', 'HOOD', 'F_MTM', 'F_HOOD', 'F_PNTS'],
         },
         7: {
             //5℃ ~ 8℃
-            normal: ['PADD', 'T_COAT', 'QLT', 'KNIT', 'MTM', 'HOOD', 'L_PNTS', 'MFLR'],
+            normal: ['PADD', 'T_COAT', 'QLT', 'KNIT', 'MTM', 'HOOD', 'L_PNTS', 'JEANS', 'MFLR'],
             sensitive_to_heat: ['T_COAT', 'QLT', 'W_COAT', 'JMP', 'MTM', 'HOOD', 'L_SLV', 'L_PNTS', 'JEANS'],
             sensitive_to_cold: [
                 'PADD',
@@ -274,6 +274,7 @@ export const RECOMMENDED_DATA: {
                 'F_MTM',
                 'F_HOOD',
                 'F_PNTS',
+                'JEANS',
                 'MFLR',
                 'K_HAT',
                 'GLVS',
