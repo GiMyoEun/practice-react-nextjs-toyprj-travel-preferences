@@ -14,9 +14,17 @@ const CurrRcmdOutfit = (props: { outfitArr: string[]; sortType: string }) => {
                     <p className={currTempRcmdOutfitSortType}>{props.sortType}</p>
                     {props.outfitArr.map((value: string, index: number) => {
                         if (index === props.outfitArr.length - 1) {
-                            return <p className={currTempRcmdOutfitText}>{OUTFITS[value]['name']}</p>;
+                            return (
+                                <p key={value} className={currTempRcmdOutfitText}>
+                                    {OUTFITS[value]['name']}
+                                </p>
+                            );
                         } else {
-                            return <p className={currTempRcmdOutfitTextEnd}>{OUTFITS[value]['name']}, </p>;
+                            return (
+                                <p key={value} className={currTempRcmdOutfitTextEnd}>
+                                    {OUTFITS[value]['name']},{' '}
+                                </p>
+                            );
                         }
                     })}
                 </div>
