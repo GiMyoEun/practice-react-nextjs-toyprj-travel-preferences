@@ -86,7 +86,7 @@ export const alerteButton =
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const currTempContent =
-    'align-baseline flex flex-col pt-8 h-auto pb-8 max-w-[400px] mx-auto bg-white opacity-40 items-center';
+    'align-baseline flex flex-col pt-8 h-auto pb-8 max-w-[420px] mx-auto bg-white opacity-40 items-center';
 
 export const currTempH1 = 'text-3xl flex flex-col text-green-950 opacity-100 subpixel-antialiased font-bold';
 

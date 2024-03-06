@@ -1,9 +1,9 @@
 import { firstPageButton, firstPageButtonDiv } from '@/styles/styles';
 
-const BgImgBtn = (props: { title: string; onClickBtn: () => void }) => {
+const BgImgBtn = (props: { title: string; onClickBtn: () => void; class?: string }) => {
     return (
         <>
-            <div className={firstPageButtonDiv}>
+            <div className={props.class || firstPageButtonDiv}>
                 <button className={firstPageButton} onClick={props.onClickBtn}>
                     {props.title}
                 </button>

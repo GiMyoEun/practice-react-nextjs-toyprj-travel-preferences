@@ -389,6 +389,7 @@ export const getSortedClothes = (clothes: string[]) => {
         bag: [],
         acc: [],
     };
+
     for (var i = 0; i < clothes.length; i++) {
         const value = clothes[i];
         sortedClothes[OUTFITS[value].sort.toLowerCase()].push(value);

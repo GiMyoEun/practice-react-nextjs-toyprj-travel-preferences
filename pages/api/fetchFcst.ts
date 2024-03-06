@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { analyzeTempt, getBaseDate, getBaseTime, getCurrPosition } from '@/public/resources/common';
 import { temptType } from '@/public/resources/constants/type';
+import { rejects } from 'assert';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -66,7 +67,7 @@ export const requestVillageFcstInfo = async (
               obsrValue: string;
           }[]
         | null
-    >((resolve) => {
+    >((resolve, rejects) => {
         let result;
         var XMLHttpRequest = require('xhr2');
         var xhr = new XMLHttpRequest();
@@ -93,16 +94,22 @@ export const requestVillageFcstInfo = async (
         xhr.open('GET', url + queryParams);
 
         xhr.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                const result = JSON.parse(this.responseText);
+            if (this.readyState == xhr.DONE) {
+                const resultCode = JSON.parse(this.response).response.header.resultCode;
 
-                if (undefined !== result.response.body && undefined !== result.response.body.items) {
-                    const resultArr: temptType[] = result.response.body.items.item;
-                    resolve(resultArr);
+                if ('00' === resultCode) {
+                    let result = JSON.parse(this.responseText);
+                    if (undefined !== result.response.body && undefined !== result.response.body.items) {
+                        const resultArr: temptType[] = result.response.body.items.item;
+                        resolve(resultArr);
+                    } else {
+                        resolve(null);
+                    }
                 } else {
+                    const resultMsg = JSON.parse(this.response).response.header.resultMsg;
+                    console.log(resultMsg);
                     resolve(null);
                 }
-            } else {
             }
         };
 

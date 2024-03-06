@@ -99,7 +99,7 @@ export const OUTFITS: {
         sort: 'OUTER',
     },
     T_COAT: {
-        name: '두꺼온 코트',
+        name: '두꺼운 코트',
         sort: 'OUTER',
     },
     PADD: {
@@ -307,7 +307,7 @@ export const RECOMMENDED_DATA: {
             ],
         },
         8: {
-            //4℃ 이하
+            //5℃ 이하
             normal: ['PADD', 'T_COAT', 'QLT', 'HTT', 'KNIT', 'F_MTM', 'F_HOOD', 'F_PNTS', 'MFLR', 'K_HAT', 'GLVS'],
             sensitive_to_heat: [
                 'PADD',
