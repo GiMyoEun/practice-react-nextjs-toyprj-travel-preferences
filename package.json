@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@tanstack/react-query": "^5.0.0-beta.35",
+    "firebase": "^10.8.1",
     "framer-motion": "^11.0.5",
     "next": "14.1.0",
     "react": "^18",

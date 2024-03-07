@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { alertTitle } from '/styles/styles';
 
-export default function Modal({ title, children, onClose }) {
+export default function Modal({ title, children, onClose, className = '' }) {
     return createPortal(
         <>
             <div className="backdrop" onClick={onClose} />
@@ -15,7 +15,7 @@ export default function Modal({ title, children, onClose }) {
                 animate="visible"
                 exit="hidden"
                 open
-                className="modal"
+                className={className ? className : 'modal'}
             >
                 <h2 className={alertTitle}>{title}</h2>
                 {children}

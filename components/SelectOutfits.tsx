@@ -18,11 +18,11 @@ const SelectOutfits = () => {
     const newSortedClothes: sortedClothesType = getSortedClothes(allOutfits);
 
     return (
-        <div className="h-[310px]">
+        <div className="h-[340px]">
             {show === 1 && newSortedClothes.outer && (
                 <SortedOutfits title="아우터" outfitArr={newSortedClothes.outer} />
             )}
-            {show === 2 && newSortedClothes.top && <SortedOutfits title="상의" outfitArr={newSortedClothes.outer} />}
+            {show === 2 && newSortedClothes.top && <SortedOutfits title="상의" outfitArr={newSortedClothes.top} />}
             {show === 3 && newSortedClothes.bottom && (
                 <SortedOutfits title="하의" outfitArr={newSortedClothes.bottom} />
             )}

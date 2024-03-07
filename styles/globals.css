@@ -71,6 +71,18 @@ body {
     /* animation: slide-up-fade-in 0.3s ease-out forwards; */
 }
 
+.modal-back {
+    background-color: rgba(0, 0, 0, 0.75);
+    top: 10%;
+    border-radius: 6px;
+    padding: 1.5rem;
+    width: 20rem;
+    max-width: 90%;
+    z-index: 10;
+
+    /* animation: slide-up-fade-in 0.3s ease-out forwards; */
+}
+
 .modal h2 {
     margin-top: 0;
 }

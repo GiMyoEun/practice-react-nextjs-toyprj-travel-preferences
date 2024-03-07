@@ -51,7 +51,35 @@ export const CMM_CODE: {
         DN: '데님', // 더우면 피하기,
         KNIT: '니트',
     },
+    DEGREE: {
+        28: 'degree28',
+        23: 'degree23',
+        20: 'degree20',
+        17: 'degree17',
+        12: 'degree12',
+        9: 'degree9',
+        5: 'degree5',
+        4: 'degree4',
+    },
+    PTY_CODE: {
+        normal: 'normal',
+        rain: 'rain',
+        snow: 'snow',
+    },
 };
+
+export const normal = (val: string) => val === '0';
+export const snow = (val: string) => val === '2' || val === '3' || val === '6' || val === '7';
+export const rain = (val: string) => val === '1' || val === '4' || val === '5';
+
+export const degree28 = (val: number) => val >= 28;
+export const degree23 = (val: number) => val >= 23 && 27 >= val;
+export const degree20 = (val: number) => val >= 20 && 22 >= val;
+export const degree17 = (val: number) => val >= 17 && 19 >= val;
+export const degree12 = (val: number) => val >= 12 && 16 >= val;
+export const degree9 = (val: number) => val >= 9 && 11 >= val;
+export const degree5 = (val: number) => val >= 5 && 8 >= val;
+export const degree4 = (val: number) => 4 >= val;
 
 export const OUTFITS: {
     [key: string]: {

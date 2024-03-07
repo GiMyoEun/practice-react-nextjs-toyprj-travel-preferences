@@ -14,6 +14,15 @@ export const alertState = atom({
     },
 });
 
+export const confirmState = atom({
+    key: 'confirmState',
+    default: {
+        title: '',
+        discription: '',
+        showConfirm: false,
+    },
+});
+
 export const temperatureState = atom({
     key: 'temperatureState',
     default: {
@@ -26,6 +35,11 @@ export const temperatureState = atom({
         pop: 0, // 강수확률
         pty: '', // 강수형태
     },
+});
+
+export const selectedOutfitsState = atom({
+    key: 'selectedOutfitsState',
+    default: {},
 });
 
 export const weatherReportState = atom({

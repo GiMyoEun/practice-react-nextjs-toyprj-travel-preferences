@@ -82,7 +82,7 @@ export const alertDiscription = 'text-sm mt-4 font-bold subpixel-antialiased';
 export const alerteButtonDiv = 'mt-6';
 
 export const alerteButton =
-    'text-sm text-[#d24545] font-bold rounded-lg p-2 bg-[#E6BAA3] hover:opacity-70 bg-white active:opacity-70 bg-white focus:opacity-70 bg-white';
+    'text-sm text-[#d24545] font-bold rounded-lg mr-1 p-2 bg-[#E6BAA3] hover:opacity-70 bg-white active:opacity-70 bg-white focus:opacity-70 bg-white';
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export const currTempContent =

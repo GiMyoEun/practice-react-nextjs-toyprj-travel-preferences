@@ -1,5 +1,21 @@
 import { recommndedOutfitListType, sortedClothesType, temperatureStateType, temptType } from './constants/type';
-import { CMM_CODE, NCST_DATA, OUTFITS, RECOMMENDED_DATA } from './data/ncst';
+import {
+    CMM_CODE,
+    NCST_DATA,
+    OUTFITS,
+    RECOMMENDED_DATA,
+    degree12,
+    degree17,
+    degree20,
+    degree23,
+    degree28,
+    degree4,
+    degree5,
+    degree9,
+    normal,
+    rain,
+    snow,
+} from './data/ncst';
 
 // 결과 객체
 /*
@@ -373,6 +389,55 @@ export const getConcatArr = (arr1: string[], arr2: string[]) => {
  * @return sortClothes 분류한 옷
  */
 export const deleteTargetElements = (arr1: string[], targetElms: string[]) => {};
+
+/**
+ * degree 구분 코드 찾기
+ *
+ * @param windChill 체감온도
+ * @return degree 구분 코드
+ */
+export const getDegreeCode = (windChill: number) => {
+    let result: string = '';
+
+    if (degree28(windChill)) {
+        result = CMM_CODE.DEGREE[28];
+    } else if (degree23(windChill)) {
+        result = CMM_CODE.DEGREE[23];
+    } else if (degree20(windChill)) {
+        result = CMM_CODE.DEGREE[20];
+    } else if (degree17(windChill)) {
+        result = CMM_CODE.DEGREE[17];
+    } else if (degree12(windChill)) {
+        result = CMM_CODE.DEGREE[12];
+    } else if (degree9(windChill)) {
+        result = CMM_CODE.DEGREE[9];
+    } else if (degree5(windChill)) {
+        result = CMM_CODE.DEGREE[5];
+    } else if (degree4(windChill)) {
+        result = CMM_CODE.DEGREE[4];
+    }
+
+    return result;
+};
+
+/**
+ * url 주소에 들어갈 pty 구분
+ *
+ * @param pty 강수코드
+ * @return result pty구분
+ */
+export const getPtyYnForUrl = (pty: string) => {
+    let result: string = '';
+    if (normal(pty)) {
+        result = CMM_CODE.PTY_CODE.normal;
+    } else if (snow(pty)) {
+        result = CMM_CODE.PTY_CODE.snow;
+    } else if (rain(pty)) {
+        result = CMM_CODE.PTY_CODE.pty;
+    }
+
+    return result;
+};
 
 /**
  * 옷 분류 (상의, 하의, 아우터...)

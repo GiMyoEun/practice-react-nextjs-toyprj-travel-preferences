@@ -13,6 +13,8 @@ import { temperatureStateType } from '@/public/resources/constants/type';
 import CurrTemp from '@/components/CurrTemp';
 import BgImgBtn from '@/UI/BgImgBtn';
 import NewForm from '@/components/NewForm';
+import { app } from '@/public/resources/config/config';
+import { doc, getFirestore, setDoc } from 'firebase/firestore';
 
 // our-domain.com/news/something-important
 
@@ -43,6 +45,7 @@ const Recommendation = () => {
                     setEditForm(false);
                 }}
                 edit={editForm}
+                answer={typeof answer === 'string' ? answer : ''}
             />
             <BgImgContent url='url("/resources/img/cloud.jpg")' class={contentClass}>
                 {!tempt.isReady && <Proceeding title="열심히 찾고있어요" />}
