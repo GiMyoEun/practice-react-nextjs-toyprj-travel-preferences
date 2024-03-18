@@ -9,9 +9,10 @@ import FormFcstData from './FormFcstData';
 import Confirm from '@/UI/Confirm';
 import { getDegreeCode, getPtyYnForUrl } from '@/public/resources/common';
 import { app } from '@/public/resources/config/config';
-import { doc, getFirestore, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getFirestore, setDoc, writeBatch } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { getDatabase } from 'firebase/database';
+import { updateRecommendedOutfits } from '@/pages/api/manageOutfitsData';
 
 /**
  * url 가져오기
@@ -78,20 +79,24 @@ const NewForm = (props: { tempt: temperatureStateType; onClose: () => void; edit
             setSelected({});
         }
     };
-    const db = getFirestore(app);
+  
 
     useEffect(() => {
-        async function test() {
-            await setDoc(doc(db, 'citiqes', 'LqA'), {
-                name: 'Los Anqgeles',
-                state: 'CA',
-                country: 'USA22',
-            });
-        }
-        test();
+        // async function test() {
+        //     // await setDoc(doc(db, 'citiqess', 'LqA'), {
+        //     //     name: 'Los Anqgeles',
+        //     //     state: 'CA',
+        //     //     country: 'USA22',
+        //     // });
+
+          
+        // }
+        // test();
+
+       
     }, []);
 
-    const saveDataHandler = () => {
+    const saveDataHandler = async () => {
         let degreeCode = getDegreeCode(props.tempt.windChill);
         let ptyCode = getPtyYnForUrl(props.tempt.pty);
         let newArr: string[] = [];
@@ -100,27 +105,43 @@ const NewForm = (props: { tempt: temperatureStateType; onClose: () => void; edit
                 newArr.push(key);
             }
         }
-        async function test() {
-            await setDoc(doc(db, props.answer, degreeCode, newArr[0]), {
-                ptyStts: ptyCode,
-                // value : getDatabase(app).FieldValue.increment(-50)
-            });
-        }
-        test();
 
-        // const url = getFetchUrl(props.tempt.windChill, props.tempt.pty, props.answer);
-        // let degreeCode = getDegreeCode(props.tempt.windChill);
-        // let ptyCode = getPtyYnForUrl(props.tempt.pty);
-        // // const dbRef = ref(getDatabase());
-        // // const updates: any = {};
-        // // updates[`${props.answer}/${degreeCode}/${ptyCode}/${newArr[0]}`] = increment(1);
-        // // update(dbRef, updates);
-        // app.database()
-        //     .ref(props.answer)
-        //     .child(degreeCode)
-        //     .child(ptyCode)
-        //     .child(newArr[0])
-        //     .set(app.database().ServerValue.increment(1));
+        updateRecommendedOutfits(degreeCode,ptyCode,newArr, props.answer);
+
+        // const db = getFirestore(app);
+        // const batch = writeBatch(db);
+        // // Set the value of 'NYC'
+        // const nycRef = doc(db, "cities", "NYC");
+        // batch.set(nycRef, {name: "New York CityNEW"});
+            
+        // // Update the population of 'SF'
+        //     // const sfRef = doc(db, "cities", "SF");
+        //     // batch.update(sfRef, {"population": 1000000});
+            
+        //     // // Delete the city 'LA'
+        //     // const laRef = doc(db, "cities", "LAWHAT");
+        //     // batch.delete(laRef);
+            
+        //     // Commit the batch
+        //     await batch.commit();
+
+        // async function test(val :string) {
+        //     await setDoc(collection(db, props.answer, degreeCode, val), {
+        //         ptyStts: ptyCode,
+        //         // value : getDatabase(app).FieldValue.increment(-50)
+        //     });
+        // }
+        // for(var i=0; i< newArr.length; i++){
+        //     await test(newArr[i]);
+        // }
+
+        
+// Get a new write batch
+
+        
+        
+
+      
     };
 
     return (

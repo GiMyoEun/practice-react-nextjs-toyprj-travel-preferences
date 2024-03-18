@@ -1,18 +1,64 @@
+import { app } from '@/public/resources/config/config';
+import { addDoc, collection, doc, getDocFromCache, getDocs, getFirestore, query, runTransaction, setDoc, writeBatch } from 'firebase/firestore';
 import { useState, useEffect, useCallback } from 'react';
-// const updateConfig: {} = {
-//     method: 'PUT',
-//     headers: {
-//         'Content-Type': 'text/plain',
-//         withCredentials: true,
-//     },
-// };
-// {
-//     brand: props.brand,
-//     name: props.name,
-//     image: props.image,
-// }
-// useHttp(`${process.env.REACT_APP_FIREBASE_URL}snacks/${props.id}.json`, updateConfig, []);
-//requestUrl, { ...config, body: data }
+
+export const updateRecommendedOutfits = async (degreeCode:string, ptyCode:string , selectedOutfits : string[], answer:string) =>{
+// Create a reference to the SF doc.
+    const db = getFirestore(app);
+    const docRef = doc(db, answer,degreeCode );
+    const batch = writeBatch(db);
+    
+    
+
+    // const updateObject = {
+    //  ...
+    // };
+
+    // await setDoc(collectionRef, updateObject, { merge: true });
+
+    async function insertData() {
+        await addDoc(collection(db, answer,degreeCode ), {
+            num: 1,
+            ptyStts: ptyCode,
+            val: selectedOutfits[0],
+        });
+    }
+    
+
+    try {
+       
+    const q = query(collection(db, answer,degreeCode ));
+
+    const querySnapshot = await getDocs(q);
+
+        if(querySnapshot.empty){
+            // await setDoc(doc(db, answer,degreeCode ), {
+            //     num: 1,
+            //     ptyStts: ptyCode,
+            //     val: selectedOutfits[0],
+            // });
+             
+            batch.set(docRef, {
+                num: 1,
+                ptyStts: ptyCode,
+                val: selectedOutfits[0],
+            });
+            await batch.commit();
+            
+        }else{
+          
+        }
+    
+    
+
+    
+    } catch (e) {
+    // This will be a "population is too big" error.
+    console.error(e);
+    }
+
+}
+
 export async function sendHttpRequest(url: string, config: {}) {
     const response = await fetch(url, config);
 

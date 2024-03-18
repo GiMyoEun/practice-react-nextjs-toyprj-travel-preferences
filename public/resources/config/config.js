@@ -5,13 +5,13 @@ import { getApp, getApps, initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: 'AIzaSyCED6unm7942bR9vsDsK3KR6cgOerw8f_g',
-    authDomain: 'fcst-wear.firebaseapp.com',
-    databaseURL: 'https://fcst-wear-default-rtdb.firebaseio.com',
-    projectId: 'fcst-wear',
-    storageBucket: 'fcst-wear.appspot.com',
-    messagingSenderId: '821452527350',
-    appId: '1:821452527350:web:90938316ff10b681b27ed7',
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    databaseURL: process.env.DATABASE_URL,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId: process.env.APP_ID,
 };
 
 // Initialize Firebase

@@ -59,13 +59,13 @@ const Recommendation = () => {
                             }}
                             title="처음으로"
                         />
-                        <BgImgBtn
+                        {/* <BgImgBtn
                             class="flex ml-2"
                             onClickBtn={() => {
                                 setEditForm(true);
                             }}
                             title="기록하기"
-                        />
+                        /> */}
                     </div>
                 </div>
             </BgImgContent>
